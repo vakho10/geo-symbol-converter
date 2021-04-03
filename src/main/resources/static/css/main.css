@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    padding: 0;    
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.container-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.container-row > * {
+    flex-grow: 1;
+}
+
+.container-row > *,
+.container-row textarea {
+    width: 100%;
+}

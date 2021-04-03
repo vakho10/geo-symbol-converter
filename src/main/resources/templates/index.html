@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <title>Home Page</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Home Page</h1>
+        <div class="container-row">
+            <form method="post" th:action="@{/}" th:object="${convertRequest}">
+                <textarea id="convertRequest" th:field="*{text}" rows="3"
+                    placeholder="Enter ascii Georgian text here..."></textarea>
+                <br />
+                <input type="submit" value="Convert" />
+            </form>
+            <textarea id="result" rows="3" placeholder="Enter ascii Georgian text here..."
+                th:text="${convertedText}"></textarea>
+        </div>
+    </div>
+</body>
+
+</html>

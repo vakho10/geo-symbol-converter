@@ -10,7 +10,7 @@
     </parent>
     <groupId>ge.edu.sangu</groupId>
     <artifactId>geo-symbol-converter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>geo-symbol-converter</name>
     <description>Converts ASCII to Georgian symbols</description>
     <properties>
@@ -45,6 +45,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -57,6 +58,58 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.35.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <alias>java-app</alias>
+                            <name>vakho/java-app:${project.version}</name>
+                            <build>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                                <from>mcr.microsoft.com/java/jre:11-zulu-ubuntu-18.04</from>
+                                <assembly>
+                                    <descriptorRef>artifact</descriptorRef>
+                                    <targetDir>/opt/app</targetDir>
+                                </assembly>
+                                <ports>
+                                    <port>8080</port>
+                                </ports>
+                                <cmd>
+                                    <shell>java -jar /opt/app/${project.artifactId}.jar</shell>
+                                </cmd>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>8000:8080</port>
+                                </ports>
+                                <wait>
+                                    <http>
+                                        <url>http://localhost:8000</url>
+                                    </http>
+                                    <time>10000</time>
+                                </wait>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
